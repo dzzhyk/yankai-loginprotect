@@ -1,7 +1,7 @@
 package com.yankaizhang.loginprotect.players;
 
+import com.yankaizhang.loginprotect.LoginProtectMod;
 import com.yankaizhang.loginprotect.utils.BlockPosUtils;
-import com.yankaizhang.loginprotect.config.ConfigLoader;
 import com.yankaizhang.loginprotect.event.PlayerEventHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,7 +36,7 @@ public class PlayerManager {
      * 用户进入世界时，新增用户信息
      */
     public void onPlayerLogin(final EntityPlayer player) {
-        playerDataMap.put(player, new PlayerData(player, player.getPosition(), ConfigLoader.immutableTicks));
+        playerDataMap.put(player, new PlayerData(player, player.getPosition(), LoginProtectMod.LoginProtectConfig.immutableTicks));
         MinecraftForge.EVENT_BUS.register(PlayerEventHandler.getInstance());
     }
 
@@ -48,14 +48,14 @@ public class PlayerManager {
             return;
         }
 
-        final double maxDist = Math.pow(ConfigLoader.maxDist, 2);
+        final double maxDist = Math.pow(LoginProtectMod.LoginProtectConfig.maxDist, 2);
 
         Iterator<Map.Entry<EntityPlayer, PlayerData>> iterator = playerDataMap.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Map.Entry<EntityPlayer, PlayerData> entry = iterator.next();
 
-            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().getPosition()) > maxDist || entry.getValue().invulTime-- <= 0) {
+            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().getPosition()) > maxDist || entry.getValue().immutableTicks-- <= 0) {
                 entry.getKey().hurtResistantTime = 0;
                 iterator.remove();
             }

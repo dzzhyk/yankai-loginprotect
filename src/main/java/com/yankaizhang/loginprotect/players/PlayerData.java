@@ -9,11 +9,11 @@ import net.minecraft.util.math.BlockPos;
 public class PlayerData {
     public EntityPlayer player;
     public BlockPos loginPos;
-    public int invulTime;
+    public int immutableTicks;
 
-    public PlayerData(final EntityPlayer player, final BlockPos loginPos, final int invulTime) {
+    public PlayerData(final EntityPlayer player, final BlockPos loginPos, final int immutableTicks) {
         this.player = player;
         this.loginPos = loginPos;
-        this.invulTime = invulTime;
+        this.immutableTicks = immutableTicks;
     }
 }
