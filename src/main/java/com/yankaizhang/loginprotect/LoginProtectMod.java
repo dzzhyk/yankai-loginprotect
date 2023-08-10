@@ -1,5 +1,7 @@
 package com.yankaizhang.loginprotect;
 
+import com.yankaizhang.loginprotect.event.PlayerLoginEventHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -7,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = LoginProtectMod.MODID, name = LoginProtectMod.NAME, version = LoginProtectMod.VERSION)
+@Mod(modid = LoginProtectMod.MODID, name = LoginProtectMod.NAME, version = LoginProtectMod.VERSION, serverSideOnly = true, acceptableRemoteVersions = "*")
 public class LoginProtectMod {
     public static final String MODID = "yankailoginprotect";
     public static final String NAME = "Yankai Login Protect";
@@ -22,6 +24,7 @@ public class LoginProtectMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(PlayerLoginEventHandler.class);
         LOGGER.info("Yankai Login Protect up!");
     }
 

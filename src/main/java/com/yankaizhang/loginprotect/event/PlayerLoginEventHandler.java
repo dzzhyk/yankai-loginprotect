@@ -8,7 +8,8 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class EventHandler {
+public class PlayerLoginEventHandler {
+
     @SubscribeEvent
     public static void onEntityAdded(final EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
