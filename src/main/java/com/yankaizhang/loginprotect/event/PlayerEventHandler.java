@@ -1,8 +1,10 @@
 package com.yankaizhang.loginprotect.event;
 
+import com.yankaizhang.loginprotect.LoginProtectMod;
 import com.yankaizhang.loginprotect.players.PlayerManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -25,6 +27,15 @@ public class PlayerEventHandler {
         if (event.getEntity() instanceof EntityPlayer) {
             if (PlayerManager.getInstance().isPlayerImmune((EntityPlayer) event.getEntity())) {
                 event.setAmount(0);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingKnockBackEvent(LivingKnockBackEvent event) {
+        if (LoginProtectMod.LoginProtectConfig.preventKnockBack && event.getEntity() instanceof EntityPlayer) {
+            if (PlayerManager.getInstance().isPlayerImmune((EntityPlayer) event.getEntity())) {
+                event.setCanceled(true);
             }
         }
     }

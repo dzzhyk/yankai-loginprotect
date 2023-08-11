@@ -35,6 +35,9 @@ public class LoginProtectMod {
 
         @Config.Comment("Max distance in blocks(2d) the invulnerability lasts, default: 10")
         public static int maxDist = 10;
+
+        @Config.Comment("Prevent knock back during protect")
+        public static boolean preventKnockBack = true;
     }
 
 }

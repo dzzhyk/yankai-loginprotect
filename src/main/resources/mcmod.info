@@ -1,16 +1,18 @@
 [
-{
-  "modid": "yankailoginprotect",
-  "name": "Yankai Login Protect",
-  "description": "Yankai Login Protect make by dzzhyk.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "dzzhyk and the Forge and FML guys, for making this mod.",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "yankailoginprotect",
+    "name": "Yankai Login Protect",
+    "description": "Yankai Login Protect for 1.12.2 make by dzzhyk.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/dzzhyk/yankai-loginprotect",
+    "updateUrl": "https://github.com/dzzhyk/yankai-loginprotect",
+    "authorList": [
+      "dzzhyk"
+    ],
+    "credits": "dzzhyk and the Forge and FML guys, for making this mod.",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]
