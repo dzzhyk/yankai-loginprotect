@@ -26,7 +26,7 @@ public class PlayerEventHandler {
     public void onLivingDamageEvent(LivingDamageEvent event) {
         if (event.getEntity() instanceof EntityPlayer) {
             if (PlayerManager.getInstance().isPlayerImmune((EntityPlayer) event.getEntity())) {
-                event.setAmount(0);
+                event.setCanceled(true);
             }
         }
     }

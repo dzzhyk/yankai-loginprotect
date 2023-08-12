@@ -1,14 +1,16 @@
 package com.yankaizhang.loginprotect.players;
 
 import com.yankaizhang.loginprotect.LoginProtectMod;
-import com.yankaizhang.loginprotect.utils.BlockPosUtils;
 import com.yankaizhang.loginprotect.event.PlayerEventHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * 用户进入世界时的管理器
@@ -18,9 +20,9 @@ public class PlayerManager {
     private static PlayerManager instance;
 
     /**
-     * Stores the logged players, allows gc deletion
+     * 存储登录用户
      */
-    private final WeakHashMap<EntityPlayer, PlayerData> playerDataMap = new WeakHashMap<>();
+    private final Map<EntityPlayer, PlayerData> playerDataMap = new HashMap<>();
 
     private PlayerManager() {
     }
@@ -36,7 +38,7 @@ public class PlayerManager {
      * 用户进入世界时，新增用户信息
      */
     public void onPlayerLogin(final EntityPlayer player) {
-        playerDataMap.put(player, new PlayerData(player, player.getPosition(), LoginProtectMod.LoginProtectConfig.immutableTicks));
+        playerDataMap.put(player, new PlayerData(player, player.getPosition(), System.currentTimeMillis()));
         MinecraftForge.EVENT_BUS.register(PlayerEventHandler.getInstance());
     }
 
@@ -48,16 +50,23 @@ public class PlayerManager {
             return;
         }
 
-        final double maxDist = Math.pow(LoginProtectMod.LoginProtectConfig.maxDist, 2);
+        final int maxDist = LoginProtectMod.LoginProtectConfig.maxDist * LoginProtectMod.LoginProtectConfig.maxDist;
 
         Iterator<Map.Entry<EntityPlayer, PlayerData>> iterator = playerDataMap.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Map.Entry<EntityPlayer, PlayerData> entry = iterator.next();
-
-            if (BlockPosUtils.dist2DSQ(entry.getValue().loginPos, entry.getKey().getPosition()) > maxDist || entry.getValue().immutableTicks-- <= 0) {
-                entry.getKey().hurtResistantTime = 0;
+            EntityPlayer player = entry.getKey();
+            PlayerData playerData = entry.getValue();
+            if (distance2D(playerData.loginPos, player.getPosition()) > maxDist ||
+                    playerData.immutableBeginTime + LoginProtectMod.LoginProtectConfig.immutableSeconds * 1000L <= System.currentTimeMillis()) {
+                player.hurtResistantTime = 0;
                 iterator.remove();
+                if (LoginProtectMod.LoginProtectConfig.showProtectNote) {
+                    TextComponentString msg = new TextComponentString("你的重生保护已失效");
+                    msg.getStyle().setBold(true).setColor(TextFormatting.RED);
+                    player.sendMessage(msg);
+                }
             }
         }
 
@@ -71,5 +80,13 @@ public class PlayerManager {
      */
     public boolean isPlayerImmune(final EntityPlayer EntityPlayer) {
         return playerDataMap.containsKey(EntityPlayer);
+    }
+
+
+    private int distance2D(final BlockPos a, final BlockPos b) {
+        final int xDiff = a.getX() - b.getX();
+        final int zDiff = a.getZ() - b.getZ();
+
+        return xDiff * xDiff + zDiff * zDiff;
     }
 }

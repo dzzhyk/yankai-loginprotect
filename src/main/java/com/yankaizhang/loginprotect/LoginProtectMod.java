@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 public class LoginProtectMod {
     public static final String MODID = "yankailoginprotect";
     public static final String NAME = "Yankai Login Protect";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
 
     public static Logger LOGGER;
 
@@ -25,19 +25,23 @@ public class LoginProtectMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(PlayerLoginEventHandler.class);
-        LOGGER.info("Yankai Login Protect up!");
+        LOGGER.info(String.format("Yankai Login Protect (version %s) up!", VERSION));
     }
 
     @Config(modid = LoginProtectMod.MODID)
     public static class LoginProtectConfig {
-        @Config.Comment("Time in ticks the logging player is invulnerable, 20 ticks = 1sec. Default is 30secs = 600 ticks")
-        public static int immutableTicks = 600;
+        @Config.Comment("Seconds the logging player is invulnerable")
+        public static int immutableSeconds = 30;
 
         @Config.Comment("Max distance in blocks(2d) the invulnerability lasts, default: 10")
         public static int maxDist = 10;
 
         @Config.Comment("Prevent knock back during protect")
         public static boolean preventKnockBack = true;
+
+        @Config.Comment("Show command message during protection")
+        public static boolean showProtectNote = true;
+
     }
 
 }
